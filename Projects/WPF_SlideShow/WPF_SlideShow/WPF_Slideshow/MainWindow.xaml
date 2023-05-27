@@ -1,0 +1,169 @@
+﻿<Window x:Class="WPF_Slideshow.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_Slideshow"
+        mc:Ignorable="d"
+        MinHeight="600" MinWidth="800"
+        WindowStartupLocation="CenterScreen"
+		Loaded="Window_Loaded"
+        Title="Image Slideshow Sample App" Height="600" Width="800"
+    >
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="20"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<DockPanel Grid.Row="0">
+			<Menu DockPanel.Dock="Top">
+				<MenuItem Header="_File">
+					<MenuItem Header="_Open Folder" Click="FolderMenu_Click"/>
+					<Separator />
+					<MenuItem Header="_Exit" Click="Exit_Click"/>
+				</MenuItem>
+                <MenuItem Name="MenuStartSlideshow" Header="_Start Slideshow">
+                    
+                </MenuItem>
+                <MenuItem Header="_About" Click="About_Click"/>
+			</Menu>
+			<TextBox AcceptsReturn="True" />
+		</DockPanel>
+		<Grid Row="1" Margin="4,4,4,4" DockPanel.Dock="Left">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="5px"/>
+				<ColumnDefinition Width="3.1*"/>
+			</Grid.ColumnDefinitions>
+			<Border BorderBrush="Black" BorderThickness="1" SnapsToDevicePixels="True">
+				<ScrollViewer VerticalScrollBarVisibility="Auto">
+					<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" MinHeight="30"/>
+						<RowDefinition Height="Auto" MinHeight="30"/>
+						<RowDefinition Height="Auto" MinHeight="30"/>
+						<RowDefinition Height="20*"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="6"/>
+						<ColumnDefinition Width="161*"/>
+						<ColumnDefinition Width="6*"/>
+					</Grid.ColumnDefinitions>
+					<Grid Grid.Row="0" Grid.Column="1" Margin="0,0,1,0">
+						<Expander Header="Explorer" HorizontalAlignment="Stretch" Margin="0,7,0,0" VerticalAlignment="Top" IsExpanded="False" Grid.Row="0" >
+								<Border BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0" SnapsToDevicePixels="True">
+									<Grid MinHeight="60">
+										<TreeView x:Name="foldersItem"
+										SelectedItemChanged="foldersItem_SelectedItemChanged"
+										Width="Auto" Background="WhiteSmoke"
+										BorderBrush="#FFFFFFFF"
+										Foreground="#FFFFFFFF">
+
+											<TreeView.Resources>
+												<Style TargetType="{x:Type TreeViewItem}">
+													<Setter Property="HeaderTemplate">
+														<Setter.Value>
+															<DataTemplate>
+																<StackPanel Orientation="Horizontal">
+																	<TextBlock Text="{Binding}" Margin="0,0" />
+																</StackPanel>
+															</DataTemplate>
+														</Setter.Value>
+													</Setter>
+												</Style>
+											</TreeView.Resources>
+
+										</TreeView>
+									</Grid>
+								</Border>
+							</Expander>
+					</Grid>
+					<Grid Grid.Row="1" Grid.Column="1">
+						<Expander x:Name="infoExpander" Header="File Info" Margin="0,10,0,0">
+							<Border BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0" SnapsToDevicePixels="True" MinHeight="45">
+								<Grid Background="WhiteSmoke">
+										<TextBlock Name="nofile" Text="No file selected!" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+										<Grid x:Name="imgdetails" Visibility="Collapsed" Height="110">
+											<Grid.RowDefinitions>
+												<RowDefinition></RowDefinition>
+												<RowDefinition></RowDefinition>
+												<RowDefinition></RowDefinition>
+												<RowDefinition></RowDefinition>
+											</Grid.RowDefinitions>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="5*"></ColumnDefinition>
+												<ColumnDefinition Width="4*"></ColumnDefinition>
+											</Grid.ColumnDefinitions>
+											<TextBlock Name="filename" Grid.Row="0" Grid.Column="0" Text="File name:" FontWeight="Bold" Margin="9,0" VerticalAlignment="Center"></TextBlock>
+											<TextBlock Name="width" Grid.Row="1" Grid.Column="0" Text="Width:" FontWeight="Bold" Margin="9,0" VerticalAlignment="Center"></TextBlock>
+											<TextBlock Name="height" Grid.Row="2" Grid.Column="0" Text="Height:" FontWeight="Bold" Margin="9,0" VerticalAlignment="Center"></TextBlock>
+											<TextBlock Name="size" Grid.Row="3" Grid.Column="0" Text="Size:" FontWeight="Bold" Margin="9,0" VerticalAlignment="Center"></TextBlock>
+											<TextBlock Name="filenameval" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"></TextBlock>
+											<TextBlock Name="widthval" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"></TextBlock>
+											<TextBlock Name="heightval" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"></TextBlock>
+											<TextBlock Name="sizeval" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"></TextBlock>
+										</Grid>
+								</Grid>
+							</Border>
+						</Expander>
+					</Grid>
+					<Grid Grid.Row="2" Grid.Column="1">
+						<Expander Header="Slideshow" Margin="0,10,0,0" >
+								<Border BorderBrush="Black" BorderThickness="1" Margin="0,7,0,0" SnapsToDevicePixels="True" Height="110">
+									<Grid Background="WhiteSmoke">
+										<Grid.RowDefinitions>
+											<RowDefinition Height="0.7*"></RowDefinition>
+											<RowDefinition Height="0.6*"></RowDefinition>
+											<RowDefinition Height="0.9*"></RowDefinition>
+										</Grid.RowDefinitions>
+										<TextBlock Grid.Row="0" Margin="0,0,0,0" Text="Select slideshow effect" HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" FontWeight="Bold" FontSize="13"/>
+                                        <ComboBox Name="options" ItemsSource="{Binding}" DisplayMemberPath="Name" Grid.Row="1" Margin="8,0,8,4"
+                                                  Background="WhiteSmoke" SelectedIndex="0">
+                                        </ComboBox>
+										<Button Grid.Row="2" Margin="8,2,8,8" Content="Start Slideshow" Click="StartSlideshow">
+											
+										</Button>
+									</Grid>
+								</Border>
+							</Expander>
+					</Grid>
+				</Grid>
+				</ScrollViewer>
+			</Border>
+			<Border BorderBrush="Black" BorderThickness="1" Grid.Column="2" SnapsToDevicePixels="True">
+				<ListView ItemsSource="{Binding}" SelectionChanged="ImageSelected">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Vertical" Width="140" Height="140">
+								<Border Margin="3,3,3,3" VerticalAlignment="Center" BorderBrush="Black" BorderThickness="1">
+									<Border.Effect>
+										<DropShadowEffect></DropShadowEffect>
+									</Border.Effect>
+									<Grid>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="auto"/>
+											<RowDefinition Height="auto" MinHeight="20px"/>
+										</Grid.RowDefinitions>
+										<Image Grid.Row = "0" Height="110" Margin="1,3,1,1" HorizontalAlignment="Center"
+											Source="{Binding Image}"/>
+										<TextBlock Grid.Row="1" Text="{Binding Title}" FontSize="11px" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+									</Grid>
+								</Border>
+							</StackPanel>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+					<ListView.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel Width ="{ Binding ActualWidth ,
+								RelativeSource ={ RelativeSource AncestorType = ListView }}"/>
+						</ItemsPanelTemplate>
+					</ListView.ItemsPanel>
+				</ListView>
+
+			</Border>
+		</Grid>
+
+	</Grid>
+</Window>
