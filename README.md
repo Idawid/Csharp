@@ -7,6 +7,8 @@ This repository contains my C# programming assignments from the Programming in G
 
 - Image processing filters (Computer Graphics)
 
+- Design Patterns (Object Oriented Design)
+
 ## Getting Started
 
 To run these projects, you will need a C# development environment such as Visual Studio. Clone this repository to your local machine, open the project in your preferred C# IDE, build and run the project.
