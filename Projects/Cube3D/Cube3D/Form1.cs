@@ -62,19 +62,25 @@ namespace Cube3D
 
 			for (int i = 0; i < cubeVertices.Length; i++)
 			{
+				// current vertex
 				float x1 = cubeVertices[i].X;
 				float y1 = cubeVertices[i].Y;
 				float z1 = cubeVertices[i].Z;
 
+				// 3D rotation calculations
 				float x2 = cosY * x1 + sinY * sinX * y1 - sinY * cosX * z1;
 				float y2 = cosX * y1 + sinX * z1;
 				float z2 = sinY * x1 - cosY * sinX * y1 + cosY * cosX * z1;
 
+				// perspective projection calculations
 				float distanceRatio = Perspective / (Perspective + z2 + distance);
+				float projectedX = x2 * distanceRatio;
+				float projectedY = y2 * distanceRatio;
 
 				screenPoints[i] = new Point(
-					(int)(halfWidth + distanceRatio * x2),
-					(int)(halfHeight + distanceRatio * y2));
+					(int)(halfWidth + projectedX),
+					(int)(halfHeight + projectedY)
+				);
 			}
 
 			// Draw the cube edges
